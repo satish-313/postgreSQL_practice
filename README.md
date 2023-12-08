@@ -1,16 +1,24 @@
-# ** sql or Postgres Note **
+# sql or Postgres Note 
 
 ### Note
-    - sql command is case agnostic
+>    sql command is case agnostic
 
 Entering the postgresql from command without password
-```sudo -i -u postgres psql```
+```
+    sudo -i -u postgres psql
+```
 
 Entering with password
-```sudo -u postgres psql```
+```
+    sudo -u postgres psql
+```
 
 List the all database
-```\l```
+```
+    \l
+```
 
 Creating the database
-```create database name```
+```
+    create database name
+```
