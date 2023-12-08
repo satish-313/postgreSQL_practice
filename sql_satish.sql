@@ -1,3 +1,6 @@
+-- Enter into postgres
+sudo -i -u postgres psql
+
 -- show all db in database
 \l -- list all database inside database
 
