@@ -97,3 +97,53 @@ INSERT INTO passenger (name , flights_id) VALUES ('pradhan',6);
 /* nested loop in sql */
 SELECT * FROM flights WHERE id IN (SELECT flights_id FROM passenger GROUP BY flights_id HAVING COUNT (*) > 1);
 
+
+/* Learning again */
+CREATE TABLE offices (
+	officeCode varchar(10) NOT NULL,
+	city varchar(50) NOT NULL,
+	phone varchar(50) NOT NULL,
+	addressLine1 varchar(50) NOT NULL,
+	addressLine2 varchar(50) ,
+	state varchar(50) ,
+	country varchar(50) NOT NULL,
+	postalCode varchar(50) NOT NULL,
+	territory varchar(50) NOT NULL,
+	PRIMARY KEY (officeCode)
+);
+
+/* inserting row into the table */
+insert into offices (officeCode,city,phone,addressLine1,state,country,postalCode,territory) values (
+	'bglr','bengaluru','+91-9534253465','MG road, behind post office','Karnataka','India','700235','Asia');
+
+insert into offices (officeCode,city,phone,addressLine1,state,country,postalCode,territory) values 
+	( 'pn','pune','+91-8734634592','Pune-mumbai road, infront RTO office','Maharatra','India','450235','Asia'), 
+	( 'idr','indore','+91-9534453489','Halkar memorial road','Madhya pradesh','India','302905','Asia'),
+	( 'del','delhi','+91-2533259459','MG road, near rajpath centre','New Delhi','India','203730','Asia'),
+	( 'nda','noida','+91-0594223001','Budha road, ambedkar centre','Uttar pradesh','India','104293','Asia'),
+	( 'dbi','dubai','+971-0034388360','Dubai hills park, emaar complex','Dubai','UAE','25314','Asia'),
+	( 'sng','singapore','+65-9511253422','Printen street, lane 65h','Central','Singapore','73249','Asia'),
+	( 'syn','sydney','+61-2846437283','Blacktown, lake street lane 45','New south well','India','700235','Asia'),
+    ( 'ny','new york','+1-22997655378','Central park, the one tower','New york','USA','265411','North America'),
+	( 'ldn','london','+9-8459492694','Bigben tower, ark complex','London','England','764376','Europe');
+
+CREATE TABLE employees (
+	employeeNumber INT NOT NULL,
+	lastName varchar(50) NOT NULL,
+	firstName varchar(50) NOT NULL,
+	extension varchar(50) NOT NULL,
+	email varchar(100) NOT NULL,
+	officeCode varchar(10) NOT NULL,
+	reportsTo INT DEFAULT NULL,
+	jobTitle varchar(50) NOT NULL
+	PRIMARY KEY (employeeNumber),
+	FOREIGN KEY (reportsTo) REFERENCES employees (employeeNumber),
+	FOREIGN KEY (officeCode) REFERENCES offices (officeCode)
+);
+
+INSERT INTO employees VALUES (
+	1002,'Murphy', 'Diane', 'x5800','dmurphy@classicmodel.com','ny',null,'President'
+);
+
+
+

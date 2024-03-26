@@ -22,3 +22,14 @@ Creating the database
 ```
     create database name
 ```
+Connect to database
+```
+    \c database_name
+    \connect database_name
+```
+
+Drop database
+```
+    drop database db_name
+```
+
