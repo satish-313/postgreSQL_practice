@@ -200,3 +200,54 @@ ALTER TABLE tablename ADD colname datatype; /* add col */
 ALTER TABLE tablename DROP COLUMN colnam; /* drop col */
 ALTER TABLE tablename MODIFY COLUMN colname datatype; /* modify col type */
 ALTER TABLE tablename RENAME COLUMN oldcolname TO newcolname; /* rename col */
+
+/* aggregation and join */
+
+-- total number payment before 2004-10-28
+SELECT COUNT(*) FROM Payments WHERE paymentDate < '2004-10-28';
+SELECT COUNT(DISTINCT customerNumber) FROM Payments WHERE paymentDate < '2004-10-28';
+
+-- chaining
+SELECT customerName from Customers where customerNumber in (select  distanct customerNumber from Payments where paymentDate < '2004-10-28');
+
+
+-- group by and as
+
+-- find the total number of payments made by each customer before 2004-10-28
+select customernumber ,count(*) from payments where paymentdate < '2004-10-28' group by customernumber;
+select customernumber ,count(*) as "number of payment" from payments where paymentdate < '2004-10-28' group by customernumber ;
+select customernumber ,sum(amount) as "total amount" from payments where paymentdate < '2004-10-28' group by customernumber ;
+select customernumber ,sum(amount) as "total amount" from payments where paymentdate < '2004-10-28' group by customernumber ;
+select productcode , sum(quantityordered) as "total quantity" from orderdetails group by productcode;
+select customernumber , max(amount) from payments group by customernumber order by max(amount) desc;
+
+-- sorting and pagination
+select customernumber,sum(amount) as "total payment" from payments group by customernumber order by sum(amount) desc limit 10 offset 10;
+
+-- mapping function
+select customername ,upper(concat(contactfirstname ,' ', contactlastname  )) as "full name", phone from customers where country = 'USA' order by customername;
+select customername , lower(substring(country from 1 for 3)) from customers order by customername limit 10;
+select productname , round(cast(msrp as numeric) ,1) ,msrp from products where productline='Motorcycles' order by msrp desc limit 5;
+
+-- arthmetics
+select  productcode ,productname ,buyprice ,msrp, round(cast(((msrp-buyprice)*100)/buyprice as numeric), 2) as profitper from products order by profitper desc limit 10;
+select customernumber,max(amount) as largestpay from payments where extract(year from paymentdate)='2004' group by customernumber order by largestpay desc limit 10;
+
+select extract(year from paymentdate) as yr, extract(month from paymentdate) as mon,sum(amount) from payments group by yr,mon order by yr,mon;
+
+-- join
+-- inner join
+-- default join is inner join
+select payments.customernumber , customers.customername,customers.phone , payments.amount, payments.paymentdate from payments join customers on customers.customernumber = payments.customernumber order by paymentdate desc limit 10;
+select concat(e.firstname,' ',e.lastname) as "employee name",o.addressline1 as address, o.phone  from employees as e join offices as o on e.officecode = o.officecode ;
+select od.ordernumber, p.productname,o.orderdate  , p.buyprice,p.quantityinstock, od.quantityordered from orderdetails as od join products as p on p.productcode = od.productcode join orders as o on o.ordernumber = od.ordernumber  where od.ordernumber = '10100';
+select e1.firstname,e1.jobtitle,e2.firstname ,e2.jobtitle  from employees as e1 join employees as e2 on e2.employeenumber = e1.reportsto;
+
+-- query performance
+-- creating index improve if not primary key
+create index customer_lastname_index on customers (contactlastland)
+
+-- view virtual table
+create view usaCustomer as select * from customers where country = "USA";
+select * from usaCustomer where state = 'CA';
+
